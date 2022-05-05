@@ -1,26 +1,14 @@
 import os
-
-from bs4 import BeautifulSoup
 import re
 from urllib.parse import urlparse
 
-from Utils import getRequest
+from bs4 import BeautifulSoup
 
-
-def catchname(pic_name, soup):
-    if len(soup) < 4:
-        for x in soup:
-            pic_name += "_" + x.find('a').text
-    else:
-        for x in range(3):
-            pic_name += "_" + soup[x].find('a').text
-    return pic_name
+import Utils
 
 
 def download(url):
-    # with open('3133.html', encoding="utf-8") as f:
-    #    soup = BeautifulSoup(f.read(), 'html.parser')
-    Page_result = getRequest(url)
+    Page_result = Utils.getRequest(url)
     soup = BeautifulSoup(Page_result.text, 'html.parser')
 
     # 获取TAG 用于 文件名
@@ -31,9 +19,9 @@ def download(url):
         artist = i.find_all('li', class_="tag-type-artist")
         character = i.find_all('li', class_="tag-type-character")
         copyright = i.find_all('li', class_="tag-type-copyright")
-        pic_name = catchname(pic_name, artist)
-        pic_name = catchname(pic_name, character)
-        pic_name = catchname(pic_name, copyright)
+        pic_name = Utils.catchname(pic_name, artist)
+        pic_name = Utils.catchname(pic_name, character)
+        pic_name = Utils.catchname(pic_name, copyright)
     print(pic_name)
 
     # 获取图片链接 和 后缀
@@ -47,5 +35,5 @@ def download(url):
             print("原图片名:" + file_)
             img_format = re.findall('(.jpg|.bmp|.png|.jpeg|.webp|.gif|.mp4|.rar|.zip)', file_)[0]  # 后缀
     with open(pic_name + img_format, 'wb') as f:
-        picBinary = getRequest(pic_url)
+        picBinary = Utils.getRequest(pic_url)
         f.write(picBinary.content)

@@ -1,7 +1,10 @@
+import re
 from urllib import parse
 
 import requests
 from requests.adapters import HTTPAdapter
+
+from modules import sankaku, rule34, gelbooru
 
 proxyON = True
 # socks代理规则
@@ -14,10 +17,20 @@ headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 mReq.mount('https://', HTTPAdapter(max_retries=3))
 mReq.mount('http://', HTTPAdapter(max_retries=3))
 
+
 # URL,需要获取的get参数
 # 返回内容
 def getUrlParams(url, params):
     return str(parse.parse_qs(url)[params][0])
+
+def catchname(pic_name, soup):
+    if len(soup) < 4:
+        for x in soup:
+            pic_name += "_" + x.find('a').text
+    else:
+        for x in range(3):
+            pic_name += "_" + soup[x].find('a').text
+    return pic_name
 
 
 # 定义Request方法,request headers 和 proxy
@@ -28,3 +41,17 @@ def getRequest(http_url):
     else:
         r = mReq.get(url=http_url, headers=headers, timeout=10)
     return r
+
+
+# 返回判断URL结果
+def checkURL(message):
+    # if re.search(r'https://exhentai.org/g/', message) or re.search(r'https://e-hentai.org/g/', message):
+    if re.search(r'https://chan.sankakucomplex.com/', message):
+        sankaku.download(message)
+    elif re.search(r'https://rule34.xxx/', message):
+        rule34.download(message)
+    elif re.search(r'https://gelbooru.com/', message):
+        gelbooru.download(message)
+    else:
+        print("退出程序")
+        exit(0)
