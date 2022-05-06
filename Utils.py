@@ -1,3 +1,4 @@
+import os
 import re
 from urllib import parse
 
@@ -6,22 +7,45 @@ from requests.adapters import HTTPAdapter
 
 from modules import sankaku, rule34, gelbooru
 
-proxyON = True
+proxyON = False
 # socks代理规则
 proxies = {'http': 'socks5://127.0.0.1:1080',
            'https': 'socks5://127.0.0.1:1080'}
 
 mReq = requests.session()
-headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                         "Chrome/85.0.4183.83 Safari/537.36"}
+headers = {}
+headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " \
+                        "Chrome/90.0.4430.93 Safari/537.36 "
+headers['Content-Type'] = "application/x-www-form-urlencoded"
+headers['dnt'] = "1"
+headers['sec-ch-ua'] = '" Not A;Brand";v="99", "Chromium";v="90", "Google Chrome";v="90"'
+headers['sec-fetch-site'] = 'same-origin'
+headers['sec-fetch-dest'] = 'document'
+headers['upgrade-insecure-requests'] = '1'
+
 mReq.mount('https://', HTTPAdapter(max_retries=3))
 mReq.mount('http://', HTTPAdapter(max_retries=3))
+
+filePath = os.path.split(os.path.realpath(__file__))[0] + os.sep  # 获取脚本当前目录
+filePath = filePath + "Picture" + os.sep
+
+
+def download(filename, url):
+    if not os.path.exists(filePath):
+        os.mkdir(filePath)
+    try:
+        with open(filePath + filename, 'wb') as f:
+            picBinary = getRequest(url)
+            f.write(picBinary.content)
+    except:
+        pass
 
 
 # URL,需要获取的get参数
 # 返回内容
 def getUrlParams(url, params):
     return str(parse.parse_qs(url)[params][0])
+
 
 def catchname(pic_name, soup):
     if len(soup) < 4:

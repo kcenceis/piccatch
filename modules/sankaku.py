@@ -34,6 +34,4 @@ def download(url):
             file_ = os.path.basename(urlparse(pic_url).path)
             print("原图片名:" + file_)
             img_format = re.findall('(.jpg|.bmp|.png|.jpeg|.webp|.gif|.mp4|.rar|.zip)', file_)[0]  # 后缀
-    with open(pic_name + img_format, 'wb') as f:
-        picBinary = Utils.getRequest(pic_url)
-        f.write(picBinary.content)
+    Utils.download(pic_name + img_format, pic_url)
