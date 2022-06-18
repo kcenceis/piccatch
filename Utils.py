@@ -5,7 +5,7 @@ from urllib import parse
 import requests
 from requests.adapters import HTTPAdapter
 
-from modules import sankaku, rule34, gelbooru
+from modules import sankaku, rule34, gelbooru, xiurenb
 
 proxyON = False
 # socks代理规则
@@ -32,7 +32,7 @@ filePath = filePath + "Picture" + os.sep
 
 def download(filename, url):
     if not os.path.exists(filePath):
-        os.mkdir(filePath)
+        os.makedirs(filePath)
     try:
         with open(filePath + filename, 'wb') as f:
             picBinary = getRequest(url)
@@ -76,6 +76,9 @@ def checkURL(message):
         rule34.download(message)
     elif re.search(r'https://gelbooru.com/', message):
         gelbooru.download(message)
+    elif re.search(r'https://www.xiurenb.com/', message):
+        xiurenb.download(message)
+
     else:
         print("退出程序")
         exit(0)
