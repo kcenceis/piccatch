@@ -76,7 +76,7 @@ def checkURL(message):
         rule34.download(message)
     elif re.search(r'https://gelbooru.com/', message):
         gelbooru.download(message)
-    elif re.search(r'https://www.xiurenb.com/', message):
+    elif re.search(r'https://www.xiurenb.', message):
         xiurenb.download(message)
 
     else:
