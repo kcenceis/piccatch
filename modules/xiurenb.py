@@ -6,9 +6,9 @@ import requests
 from bs4 import BeautifulSoup
 
 import Utils
-URI = "https://www.xiurenb.com/"
 
 def download(url):
+    domain = "https://"+'.'.join(url.split('/')[2].split('.'))+"/"
     Page_result = Utils.getRequest(url)
     soup = BeautifulSoup(Page_result.text.encode('latin1').decode('utf-8'), 'html.parser') # 转编码
     # 标题 用于命名文件夹
@@ -29,14 +29,14 @@ def download(url):
             if re.search("下页",stri):
                 continue
             else:
-                htmlpage_list.append(URI+i['href'])
+                htmlpage_list.append(domain+i['href'])
 
     for i in htmlpage_list:
         New_Page_result = Utils.getRequest(i)
         New_soup = BeautifulSoup(New_Page_result.text.encode('latin1').decode('utf-8'), 'html.parser')  # 转编码
         New_content = New_soup.find_all('div', class_="content")
         for i in New_content[1].find_all('img'):
-            src_list.append(URI+i['src'])
+            src_list.append(domain+i['src'])
 
     Utils.filePath = Utils.filePath + title + os.sep  # 获取脚本当前目录
 
