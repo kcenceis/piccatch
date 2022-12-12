@@ -7,6 +7,15 @@ from bs4 import BeautifulSoup
 import Utils
 
 
+def catchname(pic_name, soup):
+    if soup is not None:
+        for zz in soup:
+            for i in zz.find_all('a'):
+                if i.text != "?":
+                    pic_name += "_"+i.text
+    return pic_name
+
+
 def download(url):
     Page_result = Utils.getRequest(url)
     soup = BeautifulSoup(Page_result.text, 'html.parser')
@@ -14,12 +23,13 @@ def download(url):
     # 获取TAG 用于 文件名
     ul_tag_sidebar = soup.find_all('ul', id='tag-sidebar')
     for i in ul_tag_sidebar:
-        artist = i.find_all('li', class_="tag-type-artist")
-        character = i.find_all('li', class_="tag-type-character")
-        copyright = i.find_all('li', class_="tag-type-copyright")
-        pic_name = Utils.catchname(pic_name, artist)
-        pic_name = Utils.catchname(pic_name, character)
-        pic_name = Utils.catchname(pic_name, copyright)
+        artist = i.find_all('li', class_="tag-type-artist tag")
+        character = i.find_all('li', class_="tag-type-character tag")
+        copyright = i.find_all('li', class_="tag-type-copyright tag")
+
+        pic_name = catchname(pic_name, artist)
+        pic_name = catchname(pic_name, character)
+        pic_name = catchname(pic_name, copyright)
     print(pic_name)
 
     # 获取图片链接 和 后缀

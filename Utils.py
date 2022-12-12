@@ -31,6 +31,7 @@ filePath = filePath + "Picture" + os.sep
 
 
 def download(filename, url):
+    print(url)
     if not os.path.exists(filePath):
         os.makedirs(filePath)
     try:
@@ -72,7 +73,7 @@ def checkURL(message):
     # if re.search(r'https://exhentai.org/g/', message) or re.search(r'https://e-hentai.org/g/', message):
     if re.search(r'https://chan.sankakucomplex.', message):
         sankaku.download(message)
-    elif re.search(r'https://rule34.', message):
+    elif re.search(r'https://rule34.xxx', message):
         rule34.download(message)
     elif re.search(r'https://gelbooru.', message):
         gelbooru.download(message)
