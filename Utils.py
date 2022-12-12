@@ -5,7 +5,7 @@ from urllib import parse
 import requests
 from requests.adapters import HTTPAdapter
 
-from modules import sankaku, rule34, gelbooru, xiurenb
+from modules import sankaku, rule34, gelbooru, xiurenb, ex
 
 proxyON = False
 # socks代理规则
@@ -70,14 +70,18 @@ def getRequest(http_url):
 # 返回判断URL结果
 def checkURL(message):
     # if re.search(r'https://exhentai.org/g/', message) or re.search(r'https://e-hentai.org/g/', message):
-    if re.search(r'https://chan.sankakucomplex.com/', message):
+    if re.search(r'https://chan.sankakucomplex.', message):
         sankaku.download(message)
-    elif re.search(r'https://rule34.xxx/', message):
+    elif re.search(r'https://rule34.', message):
         rule34.download(message)
-    elif re.search(r'https://gelbooru.com/', message):
+    elif re.search(r'https://gelbooru.', message):
         gelbooru.download(message)
     elif re.search(r'https://www.xiurenb.', message):
         xiurenb.download(message)
+    elif re.search(r'https://exhentai.org/g/', message):
+        ex.Utils.DirectPictureDownload(message, False, 0, filePath)
+    elif re.search(r'https://e-hentai.org/g/', message):
+        ex.Utils.DirectPictureDownload(message, False, 1, filePath)
 
     else:
         print("退出程序")
