@@ -77,7 +77,7 @@ def checkURL(message):
         rule34.download(message)
     elif re.search(r'https://gelbooru.', message):
         gelbooru.download(message)
-    elif re.search(r'https://www.xiurenb.', message):
+    elif re.search(r'https://www.xiuren', message):
         xiurenb.download(message)
     elif re.search(r'https://exhentai.org/g/', message):
         ex.Utils.DirectPictureDownload(message, False, 0, filePath)
