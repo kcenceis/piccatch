@@ -30,12 +30,19 @@ filePath = os.path.split(os.path.realpath(__file__))[0] + os.sep  # 获取脚本
 filePath = filePath + "Picture" + os.sep
 
 
-def download(filename, url):
+def download(filename, url, new_file_path=""):
     print(url)
-    if not os.path.exists(filePath):
-        os.makedirs(filePath)
+    download_path = filePath
+    if new_file_path != "":
+        download_path = filePath+new_file_path
+        if not os.path.exists(download_path):
+            os.makedirs(download_path)
+    else:
+        if not os.path.exists(download_path):
+            os.makedirs(download_path)
+
     try:
-        with open(filePath + filename, 'wb') as f:
+        with open(download_path + filename, 'wb') as f:
             picBinary = getRequest(url)
             f.write(picBinary.content)
     except:
