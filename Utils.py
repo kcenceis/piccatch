@@ -92,5 +92,6 @@ def checkURL(message):
         ex.Utils.DirectPictureDownload(message, False, 1, filePath)
 
     else:
-        print("退出程序")
-        exit(0)
+        print("不符合")
+        #exit(0)
+        #continue
