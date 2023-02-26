@@ -9,8 +9,9 @@ argvalue = sys.argv[1:]
 def main():
     if len(argvalue) != 0:
         if argvalue[0] == "1":
-            if os.path.getsize('url.txt') != 0:
-                with open('url.txt') as f:
+            path = os.path.split(os.path.realpath(__file__))[0] + os.sep
+            if os.path.getsize(path+'url.txt') != 0:
+                with open(path+'url.txt') as f:
                     for l in f:
                         result = l.replace('\n', '')
                         print("开始抓取:{}".format(result))
