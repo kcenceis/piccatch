@@ -34,4 +34,5 @@ def download(url):
             file_ = os.path.basename(urlparse(pic_url).path)
             print("原图片名:" + file_)
             img_format = re.findall('(.jpg|.bmp|.png|.jpeg|.webp|.gif|.mp4|.rar|.zip)', file_)[0]  # 后缀
-    Utils.download(pic_name + img_format, pic_url)
+    pic_name = Utils.fixname(pic_name) + img_format
+    Utils.download(pic_name, pic_url)
