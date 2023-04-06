@@ -28,7 +28,11 @@ mReq.mount('http://', HTTPAdapter(max_retries=3))
 
 filePath = os.path.split(os.path.realpath(__file__))[0] + os.sep  # 获取脚本当前目录
 filePath = filePath + "Picture" + os.sep
+intab = r'[?*/\|.:><]'
 
+def fixname(filename):
+    filename = re.sub(intab, "", filename)
+    return filename
 
 def download(filename, url, new_file_path=""):
     print(url)
