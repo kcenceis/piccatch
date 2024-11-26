@@ -1,3 +1,4 @@
+import json
 import os
 import re
 from urllib import parse
@@ -5,13 +6,15 @@ from urllib import parse
 import requests
 from requests.adapters import HTTPAdapter
 
-from modules import sankaku, rule34, gelbooru, xiurenb, ex
+from modules import sankaku, rule34, gelbooru, xiurenb, ex, kemono,xiurenbiz,bestgirysexy
 
-proxyON = False
+#proxy_link = requests.get("http://127.0.0.1/proxy_link.json").text
+#proxy_json = json.loads(proxy_link)
+#proxyON = proxy_json["On"]
 # socks代理规则
-proxies = {'http': 'socks5://127.0.0.1:1080',
-           'https': 'socks5://127.0.0.1:1080'}
-
+#proxies = {'http': proxy_json["proxy"],
+ #          'https': proxy_json["proxy"]}
+proxyON = 0
 mReq = requests.session()
 headers = {}
 headers['User-Agent'] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) " \
@@ -30,15 +33,17 @@ filePath = os.path.split(os.path.realpath(__file__))[0] + os.sep  # 获取脚本
 filePath = filePath + "Picture" + os.sep
 intab = r'[?*/\|.:><]'
 
+
 def fixname(filename):
     filename = re.sub(intab, "", filename)
     return filename
+
 
 def download(filename, url, new_file_path=""):
     print(url)
     download_path = filePath
     if new_file_path != "":
-        download_path = filePath+new_file_path
+        download_path = filePath + new_file_path
         if not os.path.exists(download_path):
             os.makedirs(download_path)
     else:
@@ -72,7 +77,7 @@ def catchname(pic_name, soup):
 # 定义Request方法,request headers 和 proxy
 def getRequest(http_url):
     # 是否开启代理
-    if proxyON:
+    if proxyON == 1:
         r = mReq.get(url=http_url, headers=headers, proxies=proxies, timeout=10)
     else:
         r = mReq.get(url=http_url, headers=headers, timeout=10)
@@ -88,14 +93,20 @@ def checkURL(message):
         rule34.download(message)
     elif re.search(r'https://gelbooru.', message):
         gelbooru.download(message)
-    elif re.search(r'https://www.xiuren', message):
+    elif re.search(r'https://www.xiuren51', message):
         xiurenb.download(message)
     elif re.search(r'https://exhentai.org/g/', message):
         ex.Utils.DirectPictureDownload(message, False, 0, filePath)
     elif re.search(r'https://e-hentai.org/g/', message):
         ex.Utils.DirectPictureDownload(message, False, 1, filePath)
+    elif re.search(r'https://kemono.su/', message):
+        kemono.download(message)
+    elif re.search(r'https://xiuren.biz/', message):
+        xiurenbiz.download(message)
+    elif re.search(r'https://bestgirlsexy.com/', message):
+        bestgirysexy.download(message)
 
     else:
         print("不符合")
-        #exit(0)
-        #continue
+        # exit(0)
+        # continue
